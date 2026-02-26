@@ -1,0 +1,156 @@
+{
+  "kind": "build_request",
+  "title": "HemoScan AI – Anemia Detection & Risk Analysis Web Application",
+  "projectName": "HemoScan AI",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Build a CBC data input form that collects the following parameters: Hemoglobin (g/dL), RBC Count (million/µL), Hematocrit (%), MCV (fL), MCH (pg), MCHC (g/dL), RDW (%), WBC Count (thousand/µL), Platelet Count (thousand/µL), plus demographic fields (Age, Gender). Provide labeled inputs with unit hints, inline validation for numeric ranges, and a prominent 'Analyze' submit button.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "analyzing hemoglobin levels, red blood cell indices, and demographic data"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All CBC fields and demographic fields are present with correct labels and unit hints.",
+        "Submitting with empty or out-of-range values shows clear inline validation errors.",
+        "The form resets cleanly after a successful submission."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement a Motoko backend actor that accepts CBC and demographic parameters and returns an anemia analysis result. The analysis logic must: (1) classify anemia type (None, Iron-Deficiency, Vitamin-B12/Folate, Aplastic, Hemolytic, Thalassemia) using rule-based thresholds derived from standard hematological reference ranges, (2) compute a numerical risk score (0–100), (3) assign a risk level (Low / Moderate / High / Critical), and (4) return a list of supporting clinical observations.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Anemia classification, CBC data analysis, Risk assessment",
+          "supports early diagnosis and clinical decision-making"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The actor exposes a public query/update function that accepts all CBC + demographic fields and returns a structured result.",
+        "Each of the six anemia categories is distinguishable by the rule logic.",
+        "Risk score is always between 0 and 100.",
+        "Risk level is one of: Low, Moderate, High, Critical.",
+        "Clinical observations list is non-empty whenever anemia is detected."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Create a Results & Decision Support panel that displays the backend's analysis output. Show: anemia classification label with a color-coded badge, a visual risk score gauge or progress bar (0–100), risk level badge, a list of clinical observations, and a structured recommendations section (e.g., suggested follow-up tests, dietary advice, urgency of referral).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Medical decision support",
+          "Prediction accuracy evaluation"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Classification badge uses distinct colors for each anemia type.",
+        "Risk score is rendered as a visual gauge or progress bar.",
+        "Risk level badge color matches severity (green/yellow/orange/red).",
+        "Clinical observations and recommendations are legible and well-structured.",
+        "Panel is hidden until analysis results are returned."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Add a Reference Ranges & Accuracy Info section that displays standard CBC normal ranges in a readable table, explains the classification methodology in plain language, and shows model confidence indicators (e.g., which parameters most influenced the result) derived from the backend rule logic.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Prediction accuracy evaluation",
+          "CBC data analysis"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Normal reference ranges table covers all input parameters, split by gender where applicable.",
+        "Methodology explanation is readable by a non-specialist.",
+        "Confidence/influence indicators are shown alongside the analysis result."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Add a Patient History log stored in the Motoko backend that persists the last 10 analysis sessions (CBC inputs + results). Display a history list on the frontend where users can select a past entry to reload its inputs and results.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "supports early diagnosis and clinical decision-making for effective anemia management"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend stores up to 10 most recent analysis records.",
+        "Frontend history list shows timestamp, classification, and risk level for each entry.",
+        "Clicking a history entry repopulates the form and results panel."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Apply a cohesive medical-tech visual theme across the entire application. Use a clean, clinical aesthetic with a dark navy / deep teal primary palette, crisp white content cards, monospaced accents for numeric data, subtle grid or hexagonal background pattern, and a clear typographic hierarchy. Ensure consistent spacing, iconography (medical/lab icons), and responsive layout for desktop and tablet viewports.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Color palette is consistently applied across all pages and components.",
+        "Numeric CBC values use monospaced or tabular typography.",
+        "Layout is responsive and usable on 1024px+ viewports.",
+        "Medical/lab icons are used for section headers and badges."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Render the generated static images (logo, hero banner, background pattern) from frontend/public/assets/generated as visual assets in the application header, hero section, and page background.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Logo image appears in the top navigation bar.",
+        "Hero banner is displayed on the landing/home section.",
+        "Background pattern tile is applied to the page background."
+      ]
+    }
+  ],
+  "constraints": [
+    "All ML-style classification and risk scoring must be implemented as deterministic rule-based logic in Motoko — no Python, Scikit-learn, SVM, or Logistic Regression runtime is available on this platform.",
+    "Do not edit any file listed under frontend.immutablePaths.",
+    "All data persistence must use Motoko stable variables inside the single main actor."
+  ],
+  "nonGoals": [
+    "No Python, Pandas, NumPy, or Scikit-learn backend — rule-based Motoko logic is the substitute.",
+    "No real-time lab data integration or external medical APIs.",
+    "No user authentication or multi-patient account management.",
+    "No PDF/print export of results.",
+    "No mobile-specific (< 768px) layout optimization in this iteration."
+  ],
+  "imageRequirements": {
+    "required": [
+      "HemoScan AI logo mark — red blood cell stylized with a subtle AI circuit overlay on a dark navy background (hemoscan-logo.dim_256x256.png)",
+      "Wide hero banner — abstract microscopic blood cell imagery with deep teal and navy gradient, clinical and modern feel (hemoscan-hero.dim_1440x400.png)",
+      "Seamless hexagonal grid tile pattern in dark navy with subtle teal lines, suitable as a repeating page background (hemoscan-bg-pattern.dim_400x400.png)"
+    ],
+    "edits": []
+  }
+}
